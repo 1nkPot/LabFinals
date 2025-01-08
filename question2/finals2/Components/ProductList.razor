@@ -1,0 +1,28 @@
+﻿@page "/products"
+@using finals2.Models
+@inject HttpClient Http
+
+<h2>Product List</h2>
+<div class="product-list">
+    @if (Products != null && Products.Count > 0)
+    {
+        foreach (var product in Products)
+        {
+            <ProductCard Product="product" />
+        }
+    }
+    else
+    {
+        <p>No products available.</p>
+    }
+</div>
+
+@code {
+    private List<Product> Products { get; set; } = new List<Product>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Fetch products from API
+        Products = await Http.GetFromJsonAsync<List<Product>>("https://localhost:5001/api/products");
+    }
+}
